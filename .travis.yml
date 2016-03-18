@@ -1,0 +1,20 @@
+language: python
+
+sudo: false
+
+notifications:
+  email: false
+
+install:
+  - pip install --upgrade pip setuptools tox
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+env:
+ - TOX_ENV=py27-dj17
+ - TOX_ENV=py27-dj18
+
+script:
+  - tox -e $TOX_ENV

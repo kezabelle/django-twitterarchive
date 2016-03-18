@@ -1,0 +1,8 @@
+*.pyc
+docs/_build
+dist
+*.pickle
+.eggs
+db.sqlite3
+.tox
+htmlcov/
