@@ -61,13 +61,18 @@ class TwitterArchiveCommand(BaseCommand):
             'path': whole_path,
         }))
 
-    def stdout_tweet_of_tweets(self, index, tweet_count):
+    def stdout_tweet_of_tweets(self, index, tweet_count, result):
         # import pdb; pdb.set_trace()
         style = self.style.NOTICE
         write = self.stdout.write
-        write(style('Handled %(index)d of %(count)d' % {
-            'index': index,
+        created = len(tuple(x[1] for x in result if x[1] is True))
+        existed = len(tuple(x[1] for x in result if x[1] is False))
+        write(style('Handled %(index)s of %(count)d '
+                    '(%(created)d creates, %(updates)d found)' % {
+            'index': str(index).zfill(len(str(tweet_count))),
             'count': tweet_count,
+            'created': created,
+            'updates': existed,
         }))
 
     def handle_tweets(self, tweets):
@@ -76,7 +81,7 @@ class TwitterArchiveCommand(BaseCommand):
         for index, tweet in enumerate(tweets):
             handler = cls(tweet)
             result = handler.create()
-            self.stdout_tweet_of_tweets(index, tweet_count)
+            self.stdout_tweet_of_tweets(index, tweet_count, result)
 
 
     def get_tweets_in_directory(self, directory):

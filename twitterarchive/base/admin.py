@@ -89,3 +89,34 @@ class TweetAdminBase(admin.ModelAdmin):
     html.allow_tags = True
     html.short_description = _("text")
 
+
+class TweetAuthorAdminBase(admin.ModelAdmin):
+    list_display = ['screen_name', 'name']
+
+
+class TweetURLAdminBase(admin.ModelAdmin):
+    list_display = ['expanded_url', 'url', 'display_url']
+
+
+class TweetHashtagAdminBase(admin.ModelAdmin):
+    list_display = ['text']
+
+
+class TweetMentionAdminBase(admin.ModelAdmin):
+    list_display = ['screen_name', 'name']
+
+
+class TweetMediaAdminBase(admin.ModelAdmin):
+    list_display = ['url', 'media_url', 'inline']
+    readonly_fields = ['inline_large']
+
+    def inline(self, obj, height=5):
+        return '<img src="%s" style="max-height:%drem;">' % (obj.media_url_https, height)
+    inline.allow_tags = True
+    inline.short_description = _("Media")
+    inline.admin_order_field = 'media_url'
+
+    def inline_large(self, obj):
+        return self.inline(obj=obj, height=25)
+    inline_large.allow_tags = True
+    inline_large.short_description = _("Media")
